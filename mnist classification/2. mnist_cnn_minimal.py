@@ -6,16 +6,16 @@ x = tf.placeholder(tf.float32, [None, 784])
 y_ = tf.placeholder(tf.float32, [None, 10])
 
 def weight_variable(shape):
-	return tf.Variable(tf.truncated_normal(shape, stddev=0.1))
+    return tf.Variable(tf.truncated_normal(shape, stddev=0.1))
 
 def bias_variable(shape):
-	return tf.Variable(tf.constant(0.1, shape=shape))
+    return tf.Variable(tf.constant(0.1, shape=shape))
 
 def conv2d(x, W):
-	return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+    return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 
 def max_pool_2x2(x):
-	return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 x_image = tf.reshape(x, [-1, 28, 28, 1])
 
@@ -48,22 +48,22 @@ correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 with tf.Session() as sess:
-	sess.run(tf.global_variables_initializer())
-	for i in range(5000):
-		batch_train_xs, batch_train_ys = mnist.train.next_batch(50)
-		if (i%100 == 0):
-			training_accuracy = accuracy.eval(feed_dict={x: batch_train_xs, y_: batch_train_ys, keep_prob: 0.5})
-			print("Epoch {}, Train Accuracy: {}".format(i+1, training_accuracy))
-		sess.run(train_step, feed_dict={x: batch_train_xs, y_: batch_train_ys, keep_prob: 0.5})
+    sess.run(tf.global_variables_initializer())
+    for i in range(5000):
+        batch_train_xs, batch_train_ys = mnist.train.next_batch(50)
+        if (i%100 == 0):
+            training_accuracy = accuracy.eval(feed_dict={x: batch_train_xs, y_: batch_train_ys, keep_prob: 0.5})
+            print("Epoch {}, Train Accuracy: {}".format(i+1, training_accuracy))
+        sess.run(train_step, feed_dict={x: batch_train_xs, y_: batch_train_ys, keep_prob: 0.5})
 
-	print("Training done.")
+    print("Training done.")
 
-	batch_size = 50
-	num_batches = mnist.test.images.shape[0] // batch_size
-	test_accuracy = 0
-	for i in range(num_batches):
-		batch_test_xs, batch_test_ys = mnist.test.next_batch(batch_size)
-		test_accuracy += accuracy.eval(feed_dict={x: batch_test_xs, y_: batch_test_ys, keep_prob: 1.0})
-	test_accuracy /= num_batches
+    batch_size = 50
+    num_batches = mnist.test.images.shape[0] // batch_size
+    test_accuracy = 0
+    for i in range(num_batches):
+        batch_test_xs, batch_test_ys = mnist.test.next_batch(batch_size)
+        test_accuracy += accuracy.eval(feed_dict={x: batch_test_xs, y_: batch_test_ys, keep_prob: 1.0})
+    test_accuracy /= num_batches
 
-	print("Test Accuracy: {}".format(test_accuracy))
+    print("Test Accuracy: {}".format(test_accuracy))

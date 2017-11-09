@@ -82,7 +82,7 @@ with tf.Session() as sess:
 	if restore_checkpoint:
 		saver.restore(sess, tf.train.latest_checkpoint('./models'))
 	print("global step: {}".format(tf.train.global_step(sess, global_step)))
-	for i in range(500):
+	for i in range(1000):
 		step = i+1
 		batch_train_xs, batch_train_ys = mnist.train.next_batch(50)
 		if (step%100 == 0):
@@ -96,9 +96,6 @@ with tf.Session() as sess:
 			saver.save(sess, './models/cnn_saver', global_step=global_step)
 
 	print("Training done.")
-
-
-	# print(sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
 	batch_size = 50
 	num_batches = mnist.test.images.shape[0] // batch_size

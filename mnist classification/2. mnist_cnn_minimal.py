@@ -58,9 +58,6 @@ with tf.Session() as sess:
 
 	print("Training done.")
 
-
-	# print(sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
-
 	batch_size = 50
 	num_batches = mnist.test.images.shape[0] // batch_size
 	test_accuracy = 0

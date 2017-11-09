@@ -69,7 +69,7 @@ def main():
 
 	with tf.Session() as sess:
 		sess.run(tf.global_variables_initializer())
-		for i in range(500):
+		for i in range(1000):
 			step = i+1
 			batch_train_xs, batch_train_ys = mnist.train.next_batch(100)
 			sess.run(model.train_step, {data: batch_train_xs, target: batch_train_ys, keep_prob: 0.5})

@@ -58,7 +58,7 @@ with tf.name_scope('accuracy'):
 
 with tf.Session() as sess:
 	sess.run(tf.global_variables_initializer())
-	for i in range(5):
+	for i in range(1000):
 		batch_train_xs, batch_train_ys = mnist.train.next_batch(50)
 		if (i%100 == 0):
 			training_accuracy = accuracy.eval(feed_dict={x: batch_train_xs, y_: batch_train_ys, keep_prob: 0.5})
@@ -66,8 +66,6 @@ with tf.Session() as sess:
 		sess.run(train_step, feed_dict={x: batch_train_xs, y_: batch_train_ys, keep_prob: 0.5})
 
 	print("Training done.")
-
-	# print(sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
 	batch_size = 50
 	num_batches = mnist.test.images.shape[0] // batch_size

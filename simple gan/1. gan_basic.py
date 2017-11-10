@@ -28,6 +28,17 @@ def discriminator(x, n_units=128, reuse=False, alpha=0.01):
         out = tf.sigmoid(logits)
         return out, logits
 
+#Plotting Samples
+def view_samples(epoch, samples):
+    fig, axes = plt.subplots(figsize=(7,7), nrows=4, ncols=4, sharey=True, sharex=True)
+    for ax, img in zip(axes.flatten(), samples):
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+        im = ax.imshow(img.reshape((28,28)), cmap='Greys_r')
+    plt.savefig('epoch-' + str(epoch+1) + '.png')
+    plt.close('all')
+    return fig, axes
+
 # Hyperparameters
 input_size = 784
 z_size = 100
@@ -59,9 +70,9 @@ d_train_opt = tf.train.AdamOptimizer(learning_rate).minimize(d_loss, var_list=d_
 
 # Training
 batch_size = 100
-epochs = 200
-samples = []
+epochs = 50
 losses = []
+save_gen_sample_every = 10
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -83,7 +94,8 @@ with tf.Session() as sess:
         losses.append((train_loss_d, train_loss_g))
         sample_z = np.random.uniform(-1, 1, size=[16, z_size])
         gen_samples = sess.run(generator(input_z, input_size, n_units=g_hidden_size, reuse = True, alpha=alpha), feed_dict={input_z: sample_z})
-        samples.append(gen_samples)
+        if ((e)%save_gen_sample_every == 0):
+            view_samples(e, gen_samples)
 
 # Plotting Losses
 fig, ax = plt.subplots()
@@ -92,17 +104,5 @@ plt.plot(losses.T[0], label='Discriminator')
 plt.plot(losses.T[1], label='Generator')
 plt.title("Training Losses")
 plt.legend()
-plt.show()
+plt.savefig('training_losses.png')
 
-
-#Plotting Samples
-def view_samples(epoch, samples):
-    fig, axes = plt.subplots(figsize=(7,7), nrows=4, ncols=4, sharey=True, sharex=True)
-    for ax, img in zip(axes.flatten(), samples[epoch]):
-        ax.xaxis.set_visible(False)
-        ax.yaxis.set_visible(False)
-        im = ax.imshow(img.reshape((28,28)), cmap='Greys_r')
-    plt.savefig('foo.png')
-    return fig, axes
-
-view_samples(-1, samples)
